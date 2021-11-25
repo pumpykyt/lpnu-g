@@ -17,12 +17,10 @@ namespace lpnu.Controllers
         {
             _orderService = orderService;
         }
-
-        [Authorize]
+        
         [HttpPost("create")]
-        public async Task<IActionResult> CreateOrderAsync(OrderRequestDto model)
+        public async Task<IActionResult> CreateOrderAsync(string userId, OrderRequestDto model)
         {
-            var userId = User.Claims.First(t => t.Type == "id").Value;
             await _orderService.CreateOrderAsync(userId, model);
             return Ok();
         }

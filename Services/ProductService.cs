@@ -31,20 +31,31 @@ namespace lpnu.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ProductResponseDto>> GetProductsAsync(string searchQuery)
+        public async Task<IEnumerable<ProductResponseDto>> GetProductsAsync(string searchQuery, string sortQuery)
         {
-            if (string.IsNullOrEmpty(searchQuery))
+            var products = _context.Products.AsQueryable();
+            
+            if (!string.IsNullOrEmpty(searchQuery))
             {
-                var products = await _context.Products.ToListAsync();
-                return products.Adapt<IEnumerable<ProductResponseDto>>();
+                products = products.Where(t => t.Name.ToLower().Contains(searchQuery.ToLower()));
             }
-            else
+
+            switch (sortQuery)
             {
-                var products = await _context.Products
-                    .Where(t => t.Name.ToLower().Contains(searchQuery.ToLower()))
-                    .ToListAsync();
-                return products.Adapt<IEnumerable<ProductResponseDto>>();  
+                case "price_asc":
+                    products = products.OrderBy(t => t.Price);
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(t => t.Price);
+                    break;
+                default:
+                    products = products.OrderBy(t => t.Name);
+                    break;
             }
+
+            var result = await products.ToListAsync();
+            
+            return result.Adapt<IEnumerable<ProductResponseDto>>();
         }
 
         public async Task EditProductAsync(int productId, ProductRequestDto model)

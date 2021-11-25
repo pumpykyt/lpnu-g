@@ -1,15 +1,17 @@
-import apiStore from "../stores/apiStore";
-import myAxios from "../myAxios";
+import apiStore       from "../stores/apiStore";
+import myAxios        from "../myAxios";
 import {notification} from "antd";
-import cartStore from "../stores/cartStore";
-import authStore from "../stores/authStore";
+import cartStore      from "../stores/cartStore";
+import authStore      from "../stores/authStore";
+import jwtDecode      from "jwt-decode";
 
 class OrderService{
 
     async createOrder(products){
         try{
             apiStore.setIsFetching(true);
-            const response = await myAxios.post("/api/order/create", {
+            const userId = jwtDecode(localStorage.getItem('token')).id;
+            const response = await myAxios.post("/api/order/create?userId=" + userId, {
                 products
             });
             cartStore.clear()

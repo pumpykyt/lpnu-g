@@ -18,7 +18,8 @@ const Profile = observer(() => {
                 {
                     authStore.orders.map((item) =>
                         <div key={item.id} className="grid grid-cols-12 bg-gray-300 rounded p-2">
-                            <div className="text-lg font-bold text-black col-span-4">id: {item.id}</div>
+                            <div className="text-lg font-bold text-black col-span-2">id: {item.id}</div>
+                            <div className="text-lg font-bold text-black col-span-4">Замовник: {item.userEmail}</div>
                             <div className="text-lg text-black col-span-2">Ціна: {item.totalPrice}грн</div>
                             <div className="text-lg text-black col-span-4">Статус: {item.status}</div>
                         </div>

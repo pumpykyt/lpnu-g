@@ -65,9 +65,19 @@ namespace lpnu.Services
         public async Task<IEnumerable<OrderResponseDto>> GetUserOrdersAsync(string userId)
         {
             var orders = await _context.Orders
+                .Include(t => t.User)
                 .Where(t => t.UserId == userId)
                 .ToListAsync();
-            return orders.Adapt<IEnumerable<OrderResponseDto>>();
+
+            var result = new List<OrderResponseDto>();
+            foreach (var item in orders)
+            {
+                var temp = item.Adapt<OrderResponseDto>();
+                temp.UserEmail = item.User.Email;
+                result.Add(temp);
+            }
+
+            return result;
         }
     }
 }

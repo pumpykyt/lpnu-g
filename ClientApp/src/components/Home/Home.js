@@ -8,19 +8,22 @@ import authStore from "../../stores/authStore";
 
 const Home = observer(() => {
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortQuery, setSortQuery] = useState('default');
 
     useEffect(() => {
-        productService.getProducts();
-    }, []);
+        productService.getProducts(searchQuery, sortQuery);
+    }, [sortQuery]);
 
     const searchHandler = async() => {
-        await productService.getProducts(searchQuery);
+        await productService.getProducts(searchQuery, sortQuery);
     }
 
     return (
         <div className="home">
             <div className="container">
                 <div className="filters-wrapper my-5 w-full">
+                    <Button onClick={() => {setSortQuery('price_desc')}}>Сортувати по спаданню ціною</Button>
+                    <Button onClick={() => {setSortQuery('price_asc')}}>Сортувати за зростанню ціною</Button>
                     <div className="w-6/12 grid grid-cols-10">
                         <div className="col-span-7">
                             <Input onChange={async(e) => await setSearchQuery(e.target.value)} placeholder="Пошук"/>

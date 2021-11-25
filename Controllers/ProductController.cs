@@ -24,9 +24,9 @@ namespace lpnu.Controllers
         }
 
         [HttpGet("get")]
-        public async Task<IActionResult> GetProductsAsync(string searchQuery)
+        public async Task<IActionResult> GetProductsAsync(string searchQuery, string sortQuery = "default")
         {
-            var result = await _productService.GetProductsAsync(searchQuery);
+            var result = await _productService.GetProductsAsync(searchQuery, sortQuery);
             return Ok(result);
         }
 

@@ -23,14 +23,14 @@ class ProductService{
         }
     }
 
-    async getProducts(searchQuery){
+    async getProducts(searchQuery, sortQuery){
         try{
             apiStore.setIsFetching(true);
             let queryParams = '';
             if(searchQuery === null || searchQuery === undefined){
-               queryParams = '';
+               queryParams = '?sortQuery=' + sortQuery;
             }else{
-                queryParams = '?searchQuery=' + searchQuery;
+                queryParams = '?searchQuery=' + searchQuery + '&sortQuery=' + sortQuery;
             }
             const response = await myAxios.get('/api/product/get' + queryParams);
             productStore.setProducts(response.data)
